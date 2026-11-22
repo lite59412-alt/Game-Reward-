@@ -27,11 +27,12 @@ jobs:
       - name: Install dependencies & build web app
         run: |
           npm install --legacy-peer-deps
+          npm install @capacitor/app @capacitor/status-bar --legacy-peer-deps
           npx vite build
 
       - name: Setup Capacitor, Icons & Android platform
         run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/status-bar --legacy-peer-deps
+          npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
           npm install -D @capacitor/assets --legacy-peer-deps
           cat << 'EOF' > capacitor.config.json
           {
@@ -45,7 +46,7 @@ jobs:
               "StatusBar": {
                 "overlaysWebView": false,
                 "style": "DARK",
-                "backgroundColor": "#0b1120"
+                "backgroundColor": "#071126"
               }
             }
           }
