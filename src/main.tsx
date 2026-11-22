@@ -1,36 +1,39 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App as CapacitorApp } from '@capacitor/app';
 import App from './App.tsx';
 import './index.css';
 
-// Android Back Button Handling
-let lastBackPress = 0;
+// Har tab/modal click par browser history mein state push karein
+window.history.pushState({ page: 'home' }, '', window.location.href);
 
-CapacitorApp.addListener('backButton', ({ canGoBack }) => {
-  // 1. Pehle check karein ki koi modal ya popup khula hai to uska close button click ho jaye
+window.addEventListener('popstate', () => {
+  // Pehle check karein agar koi modal/popup/back button screen par hai to use click karein
   const closeBtn = document.querySelector(
     '[aria-label="Close"], [data-close-modal="true"], button[title="Close"]'
   ) as HTMLElement | null;
 
   if (closeBtn) {
     closeBtn.click();
+    window.history.pushState({ page: 'modal-closed' }, '', window.location.href);
     return;
   }
 
-  // 2. Agar browser history mein piche jane ka page hai to piche jaye
-  if (canGoBack || window.history.length > 1) {
-    window.history.back();
+  // Agar koi screen-level "Back" button (jaise "Back to User List" ya "<- App") dikh raha hai
+  const buttons = Array.from(document.querySelectorAll('button'));
+  const backBtn = buttons.find(
+    (btn) =>
+      btn.textContent?.trim().startsWith('←') ||
+      btn.textContent?.toLowerCase().includes('back to')
+  );
+
+  if (backBtn) {
+    backBtn.click();
+    window.history.pushState({ page: 'sub-back' }, '', window.location.href);
     return;
   }
 
-  // 3. Home screen par double-press back se hi app exit ho
-  const now = Date.now();
-  if (now - lastBackPress < 2000) {
-    CapacitorApp.exitApp();
-  } else {
-    lastBackPress = now;
-  }
+  // App ko achanak band hone se rokne ke liye state wapas push karein
+  window.history.pushState({ page: 'home' }, '', window.location.href);
 });
 
 createRoot(document.getElementById('root')!).render(
