@@ -400,5 +400,11 @@
   animation: ringChargePulse 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+html, body {
+  padding-top: env(safe-area-inset-top, 28px);
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+  background-color: #0b1120;
+}
+
 
 
