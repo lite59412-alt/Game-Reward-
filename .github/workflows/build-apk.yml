@@ -1,4 +1,4 @@
-name: Super Money
+name: Super Money 
 
 on:
   push:
@@ -29,11 +29,13 @@ jobs:
           npm install
           npm run build
 
-      - name: Setup Capacitor & Android platform
+      - name: Setup Capacitor, Icons & Android platform
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android
+          npm install -D @capacitor/assets
           npx cap init "Game Reward" "com.gamereward.app" --web-dir=dist
           npx cap add android
+          npx capacitor-assets generate --android
           npx cap sync android
 
       - name: Build Debug APK
@@ -47,4 +49,3 @@ jobs:
         with:
           name: Game-Reward-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          
