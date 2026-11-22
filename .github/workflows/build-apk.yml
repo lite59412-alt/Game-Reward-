@@ -26,13 +26,13 @@ jobs:
 
       - name: Install dependencies & build web app
         run: |
-          npm install
-          npm run build
+          npm install --legacy-peer-deps
+          npx vite build
 
       - name: Setup Capacitor, Icons & Android platform
         run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npm install -D @capacitor/assets
+          npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
+          npm install -D @capacitor/assets --legacy-peer-deps
           npx cap init "Super Money" "com.supermoney.app" --web-dir=dist
           npx cap add android
           npx capacitor-assets generate --android
@@ -49,3 +49,4 @@ jobs:
         with:
           name: Super-Money-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          
